@@ -1,0 +1,8 @@
+com.backendtotvs.backendtotvs
+com.backendtotvs.backendtotvs.config
+com.backendtotvs.backendtotvs.controller
+com.backendtotvs.backendtotvs.dto
+com.backendtotvs.backendtotvs.exception
+com.backendtotvs.backendtotvs.models
+com.backendtotvs.backendtotvs.repository
+com.backendtotvs.backendtotvs.service
