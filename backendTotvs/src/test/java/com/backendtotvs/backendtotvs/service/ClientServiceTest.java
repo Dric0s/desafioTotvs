@@ -46,7 +46,7 @@ public class ClientServiceTest {
         phones.add(new ClientPhone("61991132102"));
 
 
-        client = new Client("Rodrigo", "Rua 2", "Jardins", phones);
+        client = new Client("Rodrigo de Souza Lala", "Rua 2", "Jardins", phones);
     }
 
     @Test
@@ -83,6 +83,34 @@ public class ClientServiceTest {
     }
 
     @Test
+    void validateClientNameIsAlreadyAdd(){
+        when(clientRepository.findByName(anyString())).thenReturn(new Client("Rodrigo de Souza", "Rua j", "Jundiai", Collections.singletonList(new ClientPhone("61991132903"))));
+
+        Client duplicateClient = new Client("Rodrigo de Souza", "Rua j", "Jundiai", Collections.singletonList(new ClientPhone("61991132903")));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class, () -> clientService.createClient(duplicateClient));
+
+        List<String> listErrorMessages = exception.getErrorMessages().stream()
+                .map(ErrorMessage::getErrorMessage)
+                .toList();
+
+        assertTrue(listErrorMessages.contains("Este cliente já foi cadastrado."));
+    }
+
+    @Test
+    void validateClientNameIsBigger(){
+        client.setName("Rodrigo");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class, () -> clientService.createClient(client));
+
+        List<String> listErrorMessages = exception.getErrorMessages().stream()
+                .map(ErrorMessage::getErrorMessage)
+                .toList();
+
+        assertTrue(listErrorMessages.contains("O nome deve ter mais que 10 caracteres."));
+    }
+
+    @Test
     void validateClientWithNoName() {
         client.setName("");
         List<String> listErrors = new ArrayList<>();
@@ -102,6 +130,8 @@ public class ClientServiceTest {
 
     @Test
     void validateClientWithRepeatedPhoneNumbers() {
+
+
         List<ClientPhone> phones = new ArrayList<>();
         phones.add(new ClientPhone("61991132903"));
         phones.add(new ClientPhone("61991132903"));

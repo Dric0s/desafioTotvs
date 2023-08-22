@@ -1,3 +1,96 @@
-<ul>
-	<li *ngFor="let item of itens">{{ item.name }}</li>
-</ul>
+<po-page-default>
+	<div class="header">
+		<h1 class="left-title">Lista de Clientes</h1>
+		<div class="right-buttons">
+			<po-button p-label="Criar Cliente" (p-click)="modal.open()"></po-button>
+			<po-button p-label="Buscar" (p-click)="carregarDados()"></po-button>
+		</div>
+	</div>
+	<po-modal #modal>
+
+		<form [formGroup]="formGroup">
+			<po-tabs>
+				<po-tab p-label="Dados Pessoais" [p-active]="true">
+					<po-input p-label="Nome" formControlName="name" p-clean p-icon="po-icon-user" ></po-input>
+
+					<po-input p-label="Endereço" formControlName="address" p-clean  p-icon="po-icon po-icon-warehouse">
+					</po-input>
+
+					<po-input  p-label="Bairro" formControlName="neighborhood" p-clean p-icon="po-icon-pin">
+					</po-input>
+				</po-tab>
+
+				<po-tab p-label="Telefones">
+					<po-container>
+						<div formArrayName="phones" *ngFor="let clientPhone of formGroup.get('phones').controls; let i = index">
+							<div [formGroupName]="i">
+								<po-input
+										[p-label]="'Telefone ' + (i + 1)"
+										formControlName="phone"
+										p-clean
+										p-icon="po-icon po-icon-telephone"
+										[p-mask]="telefoneMask"
+								></po-input>
+								<po-button p-label="Remover" (click)="removeTelefone(i)"></po-button>
+							</div>
+						</div>
+						<po-button p-label="Adicionar Telefone" (click)="adicionarTelefone()"></po-button>
+
+					</po-container>
+				</po-tab>
+			</po-tabs>
+
+			<po-button p-label="Salvar" (click)="salvarFormulario()" [p-disabled]="saving"></po-button>
+
+		</form>
+	</po-modal>
+
+
+	<po-modal #modal>
+		<form [formGroup]="formGroup">
+			<!-- ... campos do formulário ... -->
+			<po-button p-label="Salvar" (click)="salvarFormulario()" [p-disabled]="saving"></po-button>
+			<po-loading *ngIf="saving"></po-loading> <!-- Mostra o loader quando saving for verdadeiro -->
+		</form>
+	</po-modal>
+	<po-loading *ngIf="saving"></po-loading>
+
+	<div class="table-container">
+		<table class="po-table">
+			<thead>
+			<tr>
+				<th>Nome</th>
+				<th>Endereço</th>
+				<th>Bairro</th>
+				<th>Telefones</th> <!-- Nova coluna -->
+			</tr>
+			</thead>
+			<tbody>
+			<tr *ngFor="let client of clients">
+				<td>{{ client.name }}</td>
+				<td>{{ client.address }}</td>
+				<td>{{ client.neighborhood }}</td>
+				<td>
+					<po-button
+							p-label="Ver Telefones"
+							(p-click)="showClientPhonesModal(client)"
+					></po-button>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<po-modal #modalTelefone>
+		<div class="custom-modal-header">
+			<h4 class="po-title">Telefones do Cliente: {{ selectedClient.name }}</h4>
+			<span class="custom-modal-close" (click)="showModal = false">&times;</span>
+		</div>
+		<div class="custom-modal-body">
+			<ul class="po-list">
+				<li *ngFor="let phone of selectedClient.phones" class="po-list-item">{{ phone.phone }}</li>
+			</ul>
+		</div>
+	</po-modal>
+</po-page-default>
+

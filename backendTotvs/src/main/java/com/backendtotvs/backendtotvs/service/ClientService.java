@@ -37,6 +37,11 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Persist novos clientes, caso aconteça algum error é retornado uma excpetion com os erros
+     * @param client
+     * @return Um cliente Dto, sem repetir o cliente no telefone
+     */
     public ClientDto createClient(Client client){
 
         List<String> errorMessages = new ArrayList<>();
@@ -53,9 +58,23 @@ public class ClientService {
         }
     }
 
+    /**
+     *Faz a validaçao de nome do cliente e chama o metodo que faz a validaçao do telefone
+     *
+     * @param client
+     * @param errorMessages Lista de mensagem para ser exibida no retorno do erro
+     *
+     * @return Se não houver error retorna true
+     */
     public boolean validateClient(Client client, List<String> errorMessages){
         if(Strings.isBlank(client.getName())){
             errorMessages.add("Nome do cliente está nulo ou vazio.");
+        }else{
+            if(client.getName().length() <= 10){
+                errorMessages.add("O nome deve ter mais que 10 caracteres.");
+            }else if(clientRepository.findByName(client.getName()) != null){
+                errorMessages.add("Este cliente já foi cadastrado.");
+            }
         }
 
         validatePhones(client, errorMessages);
@@ -63,6 +82,12 @@ public class ClientService {
         return errorMessages.isEmpty();
     }
 
+    /**
+     * Validaçoes do telefone, as mensagens de erro são colocadas na lista de erros
+     *
+     * @param client
+     * @param errorMessages Lista de mensagem para ser exibida no retorno do erro
+     */
     public void validatePhones(Client client, List<String> errorMessages){
 
         if(client.getPhones() == null || client.getPhones().isEmpty()){
@@ -88,8 +113,13 @@ public class ClientService {
         }
     }
 
-
-
+    /**
+     * Valida se o proprio objeto possui telefones repetidos.
+     *
+     * @param client
+     * @param errorMessages
+     * @return retorna true, caso nao tenha numeros repetidos
+     */
     public boolean validatePhoneRepeat(Client client, List<String> errorMessages){
 
         Set<String> uniquePhoneNumbers = new HashSet<>();

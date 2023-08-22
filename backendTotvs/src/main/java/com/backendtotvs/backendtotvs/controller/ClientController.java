@@ -21,11 +21,21 @@ public class ClientController {
         this.clientService = clientService;
     }
 
+    /**
+     *
+     * @return Busca todos os clientes cadastrados
+     */
     @GetMapping()
     public List<ClientDto> listAll() {
         return clientService.getAllClients();
     }
 
+
+    /**
+     * End-point para criar o cliente.
+     * @param client
+     * @return Retornar o cliete cadastrado ou o motivo pelo qual nao foi cadastrado
+     */
     @PostMapping()
     public ResponseEntity<?> createClient(@RequestBody Client client) {
 

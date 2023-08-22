@@ -1,0 +1,165 @@
+{
+  "client": [{
+    "name": "Rodrigo de Souza",
+    "address": "Rua J",
+    "neighborhood": "Jardins",
+    "phones": [
+      {
+        "phone": "(99) 9 9822-8928"
+      },
+      {
+        "phone": "(99) 9 9812-8925"
+      }
+    ]
+  },
+    {
+      "name": "Ana Silva",
+      "address": "Avenida A",
+      "neighborhood": "Centro",
+      "phones": [
+        {
+          "phone": "(99) 9 8888-7777"
+        },
+        {
+          "phone": "(99) 9 9999-1111"
+        }
+      ]
+    },
+    {
+      "name": "Carlos Oliveira",
+      "address": "Rua B",
+      "neighborhood": "Vila Maria",
+      "phones": [
+        {
+          "phone": "(99) 9 7777-5555"
+        }
+      ]
+    },
+    {
+      "name": "Maria Santos",
+      "address": "Rua C",
+      "neighborhood": "Bairro Novo",
+      "phones": [
+        {
+          "phone": "(99) 9 5555-3333"
+        }
+      ]
+    },
+    {
+      "name": "João Ferreira",
+      "address": "Rua D",
+      "neighborhood": "Liberdade",
+      "phones": [
+        {
+          "phone": "(99) 9 3333-1111"
+        },
+        {
+          "phone": "(99) 9 4444-2222"
+        }
+      ]
+    },
+    {
+      "name": "Fernanda Costa",
+      "address": "Rua E",
+      "neighborhood": "Praia Azul",
+      "phones": [
+        {
+          "phone": "(99) 9 7777-8888"
+        }
+      ]
+    },
+    {
+      "name": "Rafael Santos",
+      "address": "Rua F",
+      "neighborhood": "Centro",
+      "phones": [
+        {
+          "phone": "(99) 9 6666-4444"
+        },
+        {
+          "phone": "(99) 9 5555-2222"
+        }
+      ]
+    },
+    {
+      "name": "Juliana Oliveira",
+      "address": "Avenida G",
+      "neighborhood": "Jardim das Flores",
+      "phones": [
+        {
+          "phone": "(99) 9 2222-1111"
+        }
+      ]
+    },
+    {
+      "name": "Lucas Lima",
+      "address": "Rua H",
+      "neighborhood": "Vila Nova",
+      "phones": [
+        {
+          "phone": "(99) 9 4444-3333"
+        }
+      ]
+    },
+    {
+      "name": "Mariana Alves",
+      "address": "Rua I",
+      "neighborhood": "Jardins",
+      "phones": [
+        {
+          "phone": "(99) 9 8888-5555"
+        },
+        {
+          "phone": "(99) 9 7777-2222"
+        }
+      ]
+    },
+    {
+      "name": "Gustavo Rodrigues",
+      "address": "Avenida J",
+      "neighborhood": "Vila Maria",
+      "phones": [
+        {
+          "phone": "(99) 9 6666-5555"
+        }
+      ]
+    },
+    {
+      "name": "Camila Souza",
+      "address": "Rua K",
+      "neighborhood": "Praia Azul",
+      "phones": [
+        {
+          "phone": "(99) 9 5555-1111"
+        },
+        {
+          "phone": "(99) 9 4444-2222"
+        }
+      ]
+    },
+    {
+      "name": "Eduardo Silva",
+      "address": "Avenida L",
+      "neighborhood": "Bairro Novo",
+      "phones": [
+        {
+          "phone": "(99) 9 7777-1111"
+        }
+      ]
+    },
+    {
+      "name": "Patrícia Costa",
+      "address": "Rua M",
+      "neighborhood": "Centro",
+      "phones": [
+        {
+          "phone": "(99) 9 2222-3333"
+        },
+        {
+          "phone": "(99) 9 1111-4444"
+        }
+      ]
+    }
+
+  ]
+}
