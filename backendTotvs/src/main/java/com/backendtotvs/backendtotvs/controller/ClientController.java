@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -41,6 +42,21 @@ public class ClientController {
 
         try{
             ClientDto clientDto = clientService.createClient(client);
+            return ResponseEntity.ok(clientDto);
+        }catch (InvalidDataException invalidDataException){
+            return new ResponseEntity<>(invalidDataException.getErrorMessages(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PutMapping()
+    public ResponseEntity<?> editClient(@RequestBody Client client) {
+
+        if(client.getId() == null){
+            return new ResponseEntity<>(new InvalidDataException(null, Collections.singletonList("Id do cliente é obrigatório.")).getErrorMessages(), HttpStatus.BAD_REQUEST);
+        }
+        try{
+            ClientDto clientDto = clientService.editClient(client);
             return ResponseEntity.ok(clientDto);
         }catch (InvalidDataException invalidDataException){
             return new ResponseEntity<>(invalidDataException.getErrorMessages(), HttpStatus.BAD_REQUEST);

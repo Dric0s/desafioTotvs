@@ -6,6 +6,7 @@ import com.backendtotvs.backendtotvs.models.Client;
 import com.backendtotvs.backendtotvs.models.ClientPhone;
 import com.backendtotvs.backendtotvs.repository.ClientPhoneRepository;
 import com.backendtotvs.backendtotvs.repository.ClientRepository;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,59 @@ public class ClientService {
     }
 
     /**
+     * Edit de cliente, caso algum erro ocorra irá dar rollback, para nao excluir desnecessariamente os telefones
+     * @param client
+     * @return Um cliente Dto
+     */
+    @Transactional()
+    public ClientDto editClient(Client client){
+        List<String> errorMessages = new ArrayList<>();
+
+        if(client.getId() == null){
+            errorMessages.add("Id do cliente é obrigatório.");
+            throw new InvalidDataException("Dados inválidos", errorMessages);
+        }
+
+        if(validateClient(client, errorMessages)){
+
+            List<ClientPhone> clientPhonesOld = clientPhoneRepository.findAllByClientId(client.getId());
+
+            List<ClientPhone> listRemoverClientPhone = new ArrayList<>();
+
+
+            for (ClientPhone phoneAuxOld : clientPhonesOld) {
+                boolean achou = false;
+
+                for (ClientPhone phone : client.getPhones()) {
+                    if(phoneAuxOld.getPhone().equals(phone.getPhone())){
+                        phone.setId(phoneAuxOld.getId());
+                        achou = true;
+                    }
+                }
+
+                if(!achou){
+                    listRemoverClientPhone.add(phoneAuxOld);
+                }
+            }
+
+            clientPhoneRepository.deleteAll(listRemoverClientPhone);
+
+            clientRepository.save(client);
+
+            for (ClientPhone phone : client.getPhones()) {
+                phone.setClient(client);
+            }
+
+            clientPhoneRepository.saveAll(client.getPhones());
+
+            return modelMapper.map(client, ClientDto.class);
+
+        }else{
+            throw new InvalidDataException("Dados inválidos",errorMessages);
+        }
+    }
+
+    /**
      *Faz a validaçao de nome do cliente e chama o metodo que faz a validaçao do telefone
      *
      * @param client
@@ -72,11 +126,10 @@ public class ClientService {
         }else{
             if(client.getName().length() <= 10){
                 errorMessages.add("O nome deve ter mais que 10 caracteres.");
-            }else if(clientRepository.findByName(client.getName()) != null){
+            }else if(client.getId() == null && clientRepository.findByName(client.getName()) != null){
                 errorMessages.add("Este cliente já foi cadastrado.");
             }
         }
-
         validatePhones(client, errorMessages);
 
         return errorMessages.isEmpty();
@@ -101,15 +154,16 @@ public class ClientService {
                     index++;
                     if(Strings.isBlank(clientPhone.getPhone())){
                         errorMessages.add("O " + index + "º telefone está nulo ou vazio.");
-                    }else {
-                        if (clientPhoneRepository.findByPhone(clientPhone.getPhone()) != null) {
-                            errorMessages.add("O " + index + "º telefone (" + clientPhone.getPhone() + ") já está sendo utilizado.");
+                    }else{
+                        ClientPhone byPhone = clientPhoneRepository.findByPhone(clientPhone.getPhone());
+                        if (byPhone != null) {
+                            if(client.getId() == null || !byPhone.getClient().getId().equals(client.getId())){
+                                errorMessages.add("O " + index + "º telefone (" + clientPhone.getPhone() + ") já está sendo utilizado.");
+                            }
                         }
                     }
                 }
             };
-
-
         }
     }
 

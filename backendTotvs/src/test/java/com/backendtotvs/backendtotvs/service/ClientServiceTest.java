@@ -160,4 +160,33 @@ public class ClientServiceTest {
         assertTrue(errorMessages.contains("Insira no mínimo 1 telefone."));
     }
 
+    @Test
+    void editClient() {
+        List<ClientPhone> phonesAntigos = new ArrayList<>();
+        phonesAntigos.add(new ClientPhone("61991132903"));
+        phonesAntigos.add(new ClientPhone("61991132102"));
+
+        when(clientPhoneRepository.findAllByClientId(1L)).thenReturn(phonesAntigos);
+
+        List<ClientPhone> phones = new ArrayList<>();
+        phones.add(new ClientPhone("61991132903"));
+        phones.add(new ClientPhone("61991132102"));
+        phones.add(new ClientPhone("61991132101"));
+
+        Client client = new Client("Rodrigo de Souza Bento", "Rua j", "Jundiai", phones);
+        client.setId(1L);
+
+        phones.get(0).setClient(client);
+        phones.get(1).setClient(client);
+
+
+        when(clientPhoneRepository.findByPhone("61991132903")).thenReturn(phones.get(0));
+        when(clientPhoneRepository.findByPhone("61991132102")).thenReturn(phones.get(1));
+        when(clientPhoneRepository.findByPhone("61991132101")).thenReturn(null);
+
+        assertDoesNotThrow(() -> clientService.editClient(client));
+
+        assertNotNull(client.getPhones().get(2).getClient());
+    }
+
 }
