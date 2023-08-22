@@ -49,6 +49,11 @@ public class ClientController {
 
     }
 
+    /**
+     * End-point para editar o cliente.
+     * @param client
+     * @return Retornar o cliete editado ou o motivo pelo qual nao foi editado
+     */
     @PutMapping()
     public ResponseEntity<?> editClient(@RequestBody Client client) {
 
